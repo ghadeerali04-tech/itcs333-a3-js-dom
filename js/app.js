@@ -11,6 +11,39 @@
     const input =document.getElementById('todo-input');
     const todoList = document.getElementById('todo-list');
     const errorMsg=document.getElementById('error-msg');
+    const filterAll=document.getElementById('filter-all');
+    const filterActive=document.getElementById('filter-active');
+    const filterDone=document.getElementById('filter-done');
+    const counter=document.getElementById('counter');
+
+    let currentFilter= 'all';
+
+    function updateCounter(){
+        const items=todoList.querySelectorAll('li');
+        const activeItems= Array.from(items).filter(li => !li.classList.contains('completed'));
+        const count = activeItems.length;
+        if (counter){
+            counter.textContent=`${count} item${count===1? '':'s'} left`;
+        }
+    }
+
+    function applyFilter(){
+        const items =todoList.querySelectorAll('li');
+        items.forEach(li=>{
+            const isCompleted = li.classList.contains('completed');
+            if (currentFilter==='all'){ li.style.display='flex'; }
+            else if (currentFilter==='active'){
+                 li.style.display= isCompleted? 'none': 'flex'; }
+            else if (currentFilter==='done'){
+                li.style.display= isCompleted? 'flex': 'none';
+            }
+        });
+    }
+    const observer=new MutationObserver(()=>{
+        updateCounter();
+        applyFilter();
+    });
+    observer.observe(todoList, {classList: true});
 
     form.addEventListener('submit', (e)=>{
         e.preventDefault();
@@ -37,6 +70,8 @@
         todoList.appendChild(li);
 
         input.value='';
+        updateCounter();
+        applyFilter();
 
     });
 
@@ -46,9 +81,35 @@
 
         if (e.target.closest('.delete-btn')){
             li.remove();
+            updateCounter();
+            applyFilter();
             return;
         }
 
         li.classList.toggle('completed');
+        updateCounter();
+        applyFilter();
     });
+
+    if (filterAll){
+        filterAll.addEventListener('click', ()=> {
+            currentFilter= 'all';
+            applyFilter();
+        });
+    }
+
+    if (filterActive){
+        filterActive.addEventListener('click', ()=> {
+            currentFilter= 'active';
+            applyFilter();
+        });
+    }
+
+    if (filterDone){
+        filterDone.addEventListener('click', ()=> {
+            currentFilter= 'done';
+            applyFilter();
+        });
+    }
+
 }) ();
