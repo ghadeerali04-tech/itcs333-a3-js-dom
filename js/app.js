@@ -5,7 +5,7 @@
 
 // TODO: your code here
 
-
+document.addEventListener('DOMContentLoaded', () =>{
     const form = document.getElementById('todo-form');
     const input =document.getElementById('todo-input');
     const todoList = document.getElementById('todo-list');
@@ -42,7 +42,7 @@
         updateCounter();
         applyFilter();
     });
-    observer.observe(todoList, {classList: true});
+    observer.observe(todoList, { childList: true, attributes: true, subtree: true });
 
     form.addEventListener('submit', (e)=>{
         e.preventDefault();
@@ -110,4 +110,4 @@
             applyFilter();
         });
     }
-
+});
