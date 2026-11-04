@@ -23,14 +23,18 @@
         errorMsg.classList.add('hidden');
 
         const li=document.createElement('li');
-        const span =document.createElement('span');
-        span.className='item-text';
-        span.textContent=text;
 
-        li.appendChild(span);
+        li.textContent=text;
         todoList.appendChild(li);
 
         input.value='';
 
-    })
+    });
+
+    todoList.addEventListener('click',(e)=>{
+        const li=e.target.closest('li');
+        if(!li)return;
+
+        li.classList.toggle('completed');
+    });
 }) ();
