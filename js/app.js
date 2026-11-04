@@ -15,7 +15,7 @@
     form.addEventListener('submit', (e)=>{
         e.preventDefault();
 
-        const text = input.value;
+        const text = input.value.trim();
         if (text===''){
             errorMsg.classList.remove('hidden');
             return;
@@ -23,8 +23,17 @@
         errorMsg.classList.add('hidden');
 
         const li=document.createElement('li');
+        const span=document.createElement('span');
+        span.className='item-text';
+        span.textContent=text;
 
-        li.textContent=text;
+        const deleteBtn=document.createElement('button');
+        deleteBtn.type='button';
+        deleteBtn.className='delete-btn';
+        deleteBtn.textContent='Delete';
+
+        li.appendChild(span);
+        li.appendChild(deleteBtn);
         todoList.appendChild(li);
 
         input.value='';
@@ -34,6 +43,11 @@
     todoList.addEventListener('click',(e)=>{
         const li=e.target.closest('li');
         if(!li)return;
+
+        if (e.target.closest('.delete-btn')){
+            li.remove();
+            return;
+        }
 
         li.classList.toggle('completed');
     });
